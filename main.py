@@ -22,15 +22,13 @@ def create_matrix(row1, col1, row2, col2):
 				row.append(0)
 		matrix.append(row)
 	return matrix
-	for i in range (len(matrix)):
-		print(matrix[i])
 
 def is_not_repeated(num, array): #comprueba que no se repita mas de una vez un caracter en un array
-	count = 0
+	count = 1
 	for i in range (len(array)):
 		if array[i] == num:
 			count = count + 1
-	if count == 2:
+	if count > 1:
 		return 0
 	return 1
 
@@ -101,19 +99,62 @@ def one_logic(matrix): #cambia los valores de la matriz que seran siempre 4
 				matrix[i][j + 1] = 4
 			if j == 5 and matrix[i][j] == 1:
 				matrix[i][j - 1] = 4
-	print("***")
-	for i in range (len(matrix)):
-		print(matrix[i])
+
+def find_left_one(line):
+	print(line)
+	pos = 0
+	for i in range(len(line)):
+		if line[i] == 0:
+			pos = i
+	line[pos] = 1
+	line[1:5]
+	while 1:
+		if is_not_repeated(line[pos], line) == 0:
+			break
+		line[pos] = line[pos] + 1
+	return line[pos], pos
+
+def line_logic(matrix):
+	for i in range (1,4):
+		cnt_row = 0
+		for j in range(1,4):
+			if matrix[i][j] != 0:
+				cnt_row = cnt_row + 1
+				if cnt_row == 3:
+					val, pos = find_left_one(matrix[i])
+					matrix[i][pos] = val
+	i = 1
+	while i < 5:
+		temp=[]
+		j = 1
+		cnt_col = 0
+		for x in range(1,5):
+			temp.append(matrix[x][i])
+		while j < 5:
+			if matrix[j][i] != 0:
+				cnt_col = cnt_col + 1
+				if cnt_col == 3:          #ojo! esto es para que temp contemga el numero 0 restante
+					val, pos = find_left_one(temp[:])
+					matrix[pos+1][i] = val
+			j = j + 1
+		i = i + 1
+
+def check_sudoku():
+	d
 #Bloque proncipal
 
 row1= create_row()
 col1= create_col()
 row2= create_row()
 col2= create_col()
-if check_error(row1, row2, col1, col2) == 0:
-	print("El mapa no es valido")
+#if check_error(row1, row2, col1, col2) == 0:
+#	print("El mapa no es valido")
 	#exit()
-else:
-	matrix = create_matrix(row1, col2, row2, col1)
-	one_logic(matrix)
-
+#else:
+matrix = create_matrix(row1, col2, row2, col1)
+one_logic(matrix)
+matrix[4][4]=2
+matrix[4][3]=3
+line_logic(matrix)
+for i in range (len(matrix)):
+		print(matrix[i], sep=" ")
