@@ -158,6 +158,8 @@ def count_num(matrix): #retorna el numero de repeticiones de 1 2 3 y 4 en la mat
 				count_one = count_one + 1
 	return count_one, count_two, count_three, count_four
 
+def create_options():
+
 
 #****************************************************************************************#
 #								solucion del sudoku										 #
@@ -204,6 +206,7 @@ def line_logic(matrix): #me comprueba que si en una fila o linea falta un numero
 			if cnt_row == 3:
 				val, pos = find_left_one(matrix[i])
 				matrix[i][pos] = val
+				return 1
 	i = 1
 	while i < 5: #aqui se comprueban las columnas
 		temp=[]
@@ -217,11 +220,14 @@ def line_logic(matrix): #me comprueba que si en una fila o linea falta un numero
 				if cnt_col == 3:
 					val, pos = find_left_one(temp[:])
 					matrix[pos+1][i] = val
+					return 1
 			j = j + 1
 		i = i + 1
+	return 0
 
 def fill_num(matrix): #si hay 3 numeros iguales en la matriz, busca donde colocar el que falta
 	cnt_one , cnt_two, cnt_three, cnt_four = count_num(matrix)
+
 	if cnt_one == 3:
 		cords=coordenates(matrix, 1)
 		axe_i=[]
@@ -232,6 +238,8 @@ def fill_num(matrix): #si hay 3 numeros iguales en la matriz, busca donde coloca
 		i = return_left_one(axe_i)
 		j = return_left_one(axe_j)
 		matrix[i][j + 1] = 1
+		return 1
+
 	if cnt_two == 3:
 		cords=coordenates(matrix, 2)
 		axe_i=[]
@@ -242,6 +250,8 @@ def fill_num(matrix): #si hay 3 numeros iguales en la matriz, busca donde coloca
 		i = return_left_one(axe_i)
 		j = return_left_one(axe_j)
 		matrix[i][j + 1] = 2
+		return 1
+
 	if cnt_three == 3:
 		cords=coordenates(matrix, 3)
 		axe_i=[]
@@ -252,6 +262,7 @@ def fill_num(matrix): #si hay 3 numeros iguales en la matriz, busca donde coloca
 		i = return_left_one(axe_i)
 		j = return_left_one(axe_j)
 		matrix[i][j + 1] = 3
+		return 1
 
 	if cnt_four == 3:
 		cords=coordenates(matrix, 4)
@@ -264,6 +275,18 @@ def fill_num(matrix): #si hay 3 numeros iguales en la matriz, busca donde coloca
 		j = return_left_one(axe_j)
 		print(i, j)
 		matrix[i][j + 1] = 4
+		return 1
+
+	return 0
+
+def solve_sudoku(matrix):
+	cnt_line = 0
+	cnt_row = 0
+	while cnt_row < 5:
+		while 1:
+			if fill_num(matrix) == 0 and line_logic(matrix) == 0:
+				break
+
 
 def check_sudoku(matrix):
 	for i in range(1,5):
